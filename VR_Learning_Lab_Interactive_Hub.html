@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="VR Learning Lab: an interactive learning hub exploring virtual reality, data security, school infrastructure and teacher readiness.">
+<title>VR Learning Lab | Explore Beyond Reality</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{--bg:#070b18;--panel:#101a31;--panel2:#14223d;--ink:#eef5ff;--muted:#a9b8d1;--cyan:#69e5ff;--violet:#a78bfa;--pink:#ff7ac8;--lime:#b7f58b;--line:rgba(164,196,255,.17);--glow:0 0 34px rgba(105,229,255,.15);--radius:22px;--motion:1}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;background:radial-gradient(ellipse at 15% 5%,#16264a 0,transparent 32%),radial-gradient(ellipse at 85% 28%,#241b4c 0,transparent 28%),var(--bg);color:var(--ink);font-family:Manrope,Arial,sans-serif;line-height:1.65;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.23;background-image:linear-gradient(rgba(120,160,220,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(120,160,220,.08) 1px,transparent 1px);background-size:54px 54px;mask-image:linear-gradient(to bottom,black,transparent 85%);z-index:-1}
+a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}button,select,input{font:inherit}button{cursor:pointer}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;color:#111;padding:10px;z-index:999}.skip:focus{left:8px}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px clamp(16px,5vw,70px);background:rgba(7,11,24,.84);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:700 15px 'Space Grotesk';letter-spacing:.06em}.brandmark{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--cyan),var(--violet));display:grid;place-items:center;color:#07101f;font-size:19px;box-shadow:0 0 22px #69e5ff55}
+.nav{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.nav a{font-size:12px;font-weight:800;color:#c3d1e8;padding:9px 11px;border-radius:10px;transition:.25s}.nav a:hover,.nav a.active{background:#1b2b49;color:var(--cyan);text-decoration:none;box-shadow:inset 0 0 0 1px #69e5ff44}
+.menu-toggle{display:none;background:#172541;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+main{max-width:1180px;margin:auto;padding:0 25px}.hero{min-height:650px;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:35px;padding:76px 0 55px;position:relative}
+.eyebrow,.tag{font:500 11px 'DM Mono';letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}.eyebrow{display:inline-flex;align-items:center;gap:9px;border:1px solid #69e5ff44;background:#69e5ff0c;padding:8px 12px;border-radius:99px}
+.pulse{width:7px;height:7px;background:var(--lime);border-radius:50%;box-shadow:0 0 12px var(--lime);animation:pulse 2s infinite}
+h1{font:700 clamp(52px,8vw,100px)/.98 'Space Grotesk';letter-spacing:-.075em;margin:23px 0 22px;max-width:760px;text-shadow:0 3px 0 #283b63,0 8px 25px #0008;animation:rise .9s both}
+.gradient{background:linear-gradient(100deg,#fff 5%,var(--cyan) 35%,#b7a2ff 65%,#ff9bd7 95%);background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradient 8s ease infinite}
+.hero p{color:var(--muted);font-size:16px;max-width:610px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:27px 0}.btn{border:0;border-radius:13px;padding:13px 18px;font-weight:800;font-size:13px;display:inline-flex;align-items:center;gap:9px;transition:transform .2s,box-shadow .2s,background .2s}.btn:hover{transform:translateY(-3px);box-shadow:0 12px 28px #0005;text-decoration:none}.primary{background:linear-gradient(110deg,var(--cyan),#a7c8ff);color:#07101f}.secondary{background:#172541;border:1px solid var(--line);color:var(--ink)}
+.hero-note{font:11px 'DM Mono';color:#8fa4c4;letter-spacing:.06em}
+.scene{height:440px;position:relative;display:grid;place-items:center;perspective:900px}
+.planet{width:min(340px,70vw);aspect-ratio:1;border-radius:50%;position:relative;background:radial-gradient(circle at 33% 27%,#e2fbff 0,#80d9ff 7%,#6c79d5 32%,#252c68 62%,#111a3a 75%);box-shadow:inset -35px -25px 60px #050918,0 0 90px #728aff55;animation:float 7s ease-in-out infinite}
+.planet:before{content:"";position:absolute;inset:14% -16%;border:2px solid #a7c9ff9c;border-radius:50%;transform:rotate(-23deg) rotateX(65deg);box-shadow:0 0 18px #8beaff66}
+.planet:after{content:"";position:absolute;inset:24% -25%;border:1px solid #ff9bd777;border-radius:50%;transform:rotate(28deg) rotateX(68deg)}
+.planet-label{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font:11px 'DM Mono';letter-spacing:.18em;color:#d8e7ff;white-space:nowrap}
+.orbit{position:absolute;width:430px;height:180px;border:1px solid #69e5ff55;border-radius:50%;transform:rotate(-25deg);animation:orbit 18s linear infinite}
+.orbit:after{content:"✦";position:absolute;top:12px;right:35px;color:var(--pink);font-size:23px;text-shadow:0 0 18px var(--pink)}
+.float-chip{position:absolute;padding:10px 13px;border:1px solid var(--line);background:#101b32dd;backdrop-filter:blur(12px);border-radius:13px;font:11px 'DM Mono';box-shadow:var(--glow);animation:float 5s ease-in-out infinite}.chip-a{top:48px;right:0}.chip-b{bottom:65px;left:0;animation-delay:-2s}.chip-c{top:48%;right:-8px;animation-delay:-3s}
+.section{padding:80px 0;border-top:1px solid var(--line)}.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:28px}.section h2{font:700 clamp(30px,4vw,48px)/1.08 'Space Grotesk';letter-spacing:-.05em;margin:10px 0}.section-intro{color:var(--muted);max-width:680px;margin:0}.section-no{font:12px 'DM Mono';color:#7187aa}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:linear-gradient(145deg,#14213b,#0d162b);border:1px solid var(--line);border-radius:var(--radius);padding:23px;position:relative;overflow:hidden;transition:transform .28s,border-color .28s,box-shadow .28s;transform-style:preserve-3d}.card:before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,#69e5ff20,transparent 70%);top:-100px;right:-90px;pointer-events:none}.card:hover{transform:translateY(-7px) rotateX(1deg);border-color:#69e5ff66;box-shadow:0 18px 40px #0005,var(--glow)}.icon{font-size:27px;margin-bottom:13px;display:block}.card h3{font:700 19px 'Space Grotesk';margin:5px 0 8px}.card p{color:var(--muted);font-size:13px;margin:0}.mini{font:10px 'DM Mono';letter-spacing:.12em;color:var(--cyan);text-transform:uppercase}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{background:#0e192e;border:1px solid var(--line);border-radius:var(--radius);padding:25px}.panel h3{font:700 21px 'Space Grotesk';margin:0 0 12px}.panel p,.panel li{color:var(--muted);font-size:14px}.panel ul{padding-left:20px}.callout{border-left:3px solid var(--cyan);background:#69e5ff0d;padding:14px 17px;border-radius:0 12px 12px 0;color:#d7e9ff;font-size:13px;margin-top:15px}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:5px 10px;color:#b9c9e2;font:10px 'DM Mono';margin:3px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}.step{background:#111f38;border:1px solid var(--line);border-radius:16px;padding:17px}.step b{display:block;color:var(--cyan);font:700 24px 'Space Grotesk'}.step span{font-size:12px;color:var(--muted)}
+.activity{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px}.choice{display:block;width:100%;text-align:left;margin:9px 0;padding:13px 15px;background:#14233f;border:1px solid var(--line);border-radius:12px;color:var(--ink);font-size:13px;transition:.2s}.choice:hover{border-color:var(--cyan);background:#1a3151}.choice.selected{border-color:var(--cyan);box-shadow:0 0 0 2px #69e5ff20}.feedback{min-height:55px;margin-top:12px;padding:13px;border-radius:12px;background:#111f38;color:var(--muted);font-size:13px}.feedback.good{color:#caffb8;border:1px solid #b7f58b55}.feedback.bad{color:#ffc5d9;border:1px solid #ff7ac855}
+.quiz-q{padding:18px 0;border-bottom:1px solid var(--line)}.quiz-q h4{font-size:15px;margin:0 0 8px}.quiz-q label{display:block;padding:7px 9px;color:var(--muted);font-size:13px;cursor:pointer}.quiz-q input{accent-color:#69e5ff;margin-right:8px}.result{margin-top:18px;padding:20px;border:1px solid #69e5ff55;background:#69e5ff0c;border-radius:16px;display:none}.result strong{font:700 32px 'Space Grotesk';color:var(--cyan)}
+.checklist{display:grid;grid-template-columns:1fr 1fr;gap:10px}.check{display:flex;gap:11px;padding:13px;background:#14213b;border:1px solid var(--line);border-radius:12px;color:#c9d6e9;font-size:13px}.check input{accent-color:var(--cyan);width:17px;height:17px;flex-shrink:0}
+.resource{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.resource:last-child{border:0}.resource b{display:block;font-size:14px}.resource small{color:var(--muted);font-size:11px}.resource a{font-size:12px;font-weight:800;white-space:nowrap}
+.live-list{display:grid;gap:10px}.live-item{display:flex;gap:14px;padding:14px;background:#14213b;border:1px solid var(--line);border-radius:13px}.live-item .num{font:700 18px 'Space Grotesk';color:var(--cyan)}.live-item b{font-size:13px}.live-item p{font-size:12px;color:var(--muted);margin:3px 0 0}
+footer{border-top:1px solid var(--line);padding:32px 25px 50px;text-align:center;color:#8295b5;font-size:11px}.footer-brand{font:700 18px 'Space Grotesk';color:#d9e8ff;margin-bottom:8px}
+.progress-wrap{height:3px;background:#17233c;position:fixed;top:0;left:0;width:100%;z-index:100}.progress{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--pink))}
+.reveal{opacity:1;transform:none}.js-ready .reveal{opacity:0;transform:translateY(20px);transition:opacity .65s,transform .65s}.js-ready .reveal.visible{opacity:1;transform:none}
+.modal{display:none;position:fixed;inset:0;z-index:100;background:#030712d9;backdrop-filter:blur(10px);padding:20px;place-items:center}.modal.open{display:grid}.modal-box{max-width:700px;width:100%;max-height:85vh;overflow:auto;background:#101c33;border:1px solid #69e5ff66;border-radius:22px;padding:25px;box-shadow:0 25px 90px #0009}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{border:1px solid var(--line);background:#1b2b49;color:white;border-radius:10px;padding:8px 12px}
+select{background:#13223d;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px}
+.small-note{font-size:11px;color:#8295b5}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}@keyframes orbit{to{transform:rotate(335deg)}}@keyframes pulse{50%{opacity:.4;transform:scale(.75)}}@keyframes rise{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}@keyframes gradient{to{background-position:200% center}}
+body.motion-off *,body.motion-off *:before,body.motion-off *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.js-ready .reveal{opacity:1;transform:none}}
+@media(max-width:850px){.hero{grid-template-columns:1fr;padding-top:55px}.scene{height:340px}.planet{width:260px}.orbit{width:340px}.grid{grid-template-columns:repeat(2,1fr)}.nav{display:none;position:absolute;top:62px;left:12px;right:12px;padding:12px;background:#0d172b;border:1px solid var(--line);border-radius:15px;box-shadow:0 15px 35px #0009}.nav.open{display:grid;grid-template-columns:1fr 1fr}.menu-toggle{display:block}.two,.activity{grid-template-columns:1fr}}
+@media(max-width:560px){main{padding:0 17px}.hero{min-height:unset;padding:55px 0 30px}h1{font-size:56px}.scene{height:300px}.planet{width:220px}.orbit{width:290px;height:140px}.chip-a{right:-3px}.chip-b{left:-4px}.grid,.steps,.checklist{grid-template-columns:1fr}.section{padding:60px 0}.section-head{display:block}.section-no{display:block;margin-top:12px}.topbar{padding:11px 15px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a><div class="progress-wrap"><div class="progress" id="progress"></div></div>
+<header class="topbar">
+  <a class="brand" href="#home" aria-label="VR Learning Lab home"><span class="brandmark">◉</span> VR LEARNING LAB</a>
+  <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="nav">☰ Menu</button>
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <a href="#discover">Discover</a><a href="#challenges">Challenges</a><a href="#privacy">Privacy</a><a href="#activities">Activities</a><a href="#assessment">Quiz</a><a href="#livestream">Live Session</a><a href="#references">References</a>
+  </nav>
+</header>
+<main id="main">
+<section class="hero" id="home">
+ <div>
+  <span class="eyebrow"><i class="pulse"></i> DIGITAL LEARNING HUB · TOPIC 8</span>
+  <h1>EXPLORE<br><span class="gradient">BEYOND</span><br>REALITY.</h1>
+  <p>Can virtual reality transform the classroom? Step into an immersive learning journey and discover how teachers can use VR meaningfully while protecting learners’ data, overcoming infrastructure barriers and building teacher readiness.</p>
+  <div class="hero-actions"><a class="btn primary" href="#discover">Start exploring <span>↗</span></a><a class="btn secondary" href="#assessment">Take the challenge</a></div>
+  <div class="hero-note">LEARN SMART · STAY SAFE · TEACH WITH PURPOSE</div>
+ </div>
+ <div class="scene" aria-label="Decorative animated virtual planet">
+  <div class="orbit"></div><div class="planet"><div class="planet-label">VIRTUAL WORLD / 01</div></div>
+  <div class="float-chip chip-a">◈ IMMERSIVE LEARNING</div><div class="float-chip chip-b">⌁ DATA PROTECTION</div><div class="float-chip chip-c">✦ TEACHER READY</div>
+ </div>
+</section>
+
+<section class="section reveal" id="discover">
+ <div class="section-head"><div><span class="tag">01 / ORIENTATION</span><h2>Welcome, future VR educator.</h2><p class="section-intro">This hub is designed for pre-service and in-service teachers who want to make informed decisions about using virtual reality in schools.</p></div><span class="section-no">YOUR LEARNING JOURNEY</span></div>
+ <div class="two">
+  <div class="panel"><h3>🎯 Learning objectives</h3><p>By the end of this learning hub, you should be able to:</p><ol><li>Explain how VR can support teaching and learning.</li><li>Identify data security and confidentiality risks when learners use VR.</li><li>Evaluate infrastructure and teacher-readiness challenges.</li><li>Recommend practical, inclusive and ethical strategies for classroom VR integration.</li></ol></div>
+  <div class="panel"><h3>🧭 How to use this hub</h3><ul><li>Follow the sections in order, or use the top menu to revisit a topic.</li><li>Explore the mini-scenario and complete the interactive checklist.</li><li>Listen to the built-in audio summary using the audio button.</li><li>Complete the 10-question quiz and read the feedback.</li><li>Use the teacher toolkit to plan a safe, realistic VR lesson.</li></ul><div class="callout">No VR headset is required to complete this hub. All core learning activities work on a standard phone, tablet or computer.</div></div>
+ </div>
+ <div class="steps"><div class="step"><b>01</b><span>DISCOVER<br>Understand VR</span></div><div class="step"><b>02</b><span>IDENTIFY<br>Explore the challenges</span></div><div class="step"><b>03</b><span>APPLY<br>Make safe decisions</span></div><div class="step"><b>04</b><span>CHECK<br>Assess your learning</span></div></div>
+</section>
+
+<section class="section reveal" id="challenges">
+ <div class="section-head"><div><span class="tag">02 / THE BIG PICTURE</span><h2>VR has potential. Readiness matters.</h2><p class="section-intro">Virtual reality (VR) uses computer-generated environments that allow users to explore and interact with simulated spaces. In education, it can support virtual field trips, simulations and experiential learning.</p></div><span class="section-no">TECHNOLOGY + PEOPLE</span></div>
+ <div class="grid">
+  <article class="card"><span class="icon">🥽</span><span class="mini">TECHNOLOGY TREND</span><h3>Virtual Reality</h3><p>Imagine taking a class on a virtual visit to a zoo, rainforest or historical site. Learners can explore a simulated environment instead of only reading about it.</p></article>
+  <article class="card"><span class="icon">🔐</span><span class="mini">KEY ISSUE</span><h3>Data security & confidentiality</h3><p>VR platforms may collect account details, voice, images, movement, interaction records or other user information. Schools must know what is collected, why and who can access it.</p></article>
+  <article class="card"><span class="icon">🛰️</span><span class="mini">CHALLENGE 01</span><h3>Technological infrastructure</h3><p>Schools may lack enough headsets, compatible devices, charging facilities, technical support or reliable internet access.</p></article>
+  <article class="card"><span class="icon">🧑‍🏫</span><span class="mini">CHALLENGE 02</span><h3>Teacher readiness</h3><p>Teachers need practical training, confidence and lesson-design skills to connect VR experiences to clear learning outcomes.</p></article>
+  <article class="card"><span class="icon">🌍</span><span class="mini">LEARNING OPPORTUNITY</span><h3>Virtual field trips</h3><p>A virtual zoo tour can help pupils observe animal habitats, compare features and discuss conservation without travelling to the physical location.</p></article>
+  <article class="card"><span class="icon">🧩</span><span class="mini">DESIGN PRINCIPLE</span><h3>Purpose before technology</h3><p>Choose VR only when it adds learning value. A headset is not automatically better than a well-designed video, image or group discussion.</p></article>
+ </div>
+ <div class="callout">Evidence snapshot: A 2025 systematic review and meta-analysis examined 52 empirical studies on VR in teacher education and reported a positive, moderate overall effect. The review also stresses that outcomes vary by equipment, immersion level and learning objectives (Han et al., 2025).</div>
+</section>
+
+<section class="section reveal" id="privacy">
+ <div class="section-head"><div><span class="tag">03 / SAFE BY DESIGN</span><h2>Who is watching the virtual world?</h2><p class="section-intro">A VR experience can feel like a private adventure, but digital systems may process information behind the scenes. Data protection must be part of lesson planning, not an afterthought.</p></div><span class="section-no">PRIVACY FIRST</span></div>
+ <div class="two">
+  <div class="panel"><h3>🔎 What data could be involved?</h3><ul><li><b>Identity data:</b> name, email address, username or school account.</li><li><b>Audio-visual data:</b> voice recordings, photographs or video, if enabled.</li><li><b>Interaction data:</b> clicks, choices, activity history and session duration.</li><li><b>Device or movement data:</b> device identifiers, location or motion-related data, depending on the platform and permissions.</li></ul><p class="small-note">The exact data collected depends on the device, application, settings and provider. Always check the platform's privacy notice.</p></div>
+  <div class="panel"><h3>🛡️ The SAFE VR protocol</h3><p><span class="pill">S · Select</span> <span class="pill">A · Ask</span> <span class="pill">F · Filter</span> <span class="pill">E · Evaluate</span></p><ul><li><b>Select</b> school-approved tools with clear privacy information.</li><li><b>Ask</b> for appropriate consent and explain the activity to learners and parents or guardians where required.</li><li><b>Filter</b> unnecessary permissions, personal details and public sharing features.</li><li><b>Evaluate</b> data retention, account deletion, access controls and provider practices.</li></ul><div class="callout">Use the minimum data necessary. Do not upload pupils’ names, faces, voices or identifiable information to an unapproved platform.</div></div>
+ </div>
+ <div style="margin-top:22px" class="panel"><h3>Quick check: Is this VR activity privacy-ready?</h3><p>Tick each safeguard that is in place. Your readiness indicator updates automatically.</p><div class="checklist" id="privacyChecks">
+  <label class="check"><input type="checkbox"> The school has reviewed and approved the VR platform.</label>
+  <label class="check"><input type="checkbox"> The teacher has checked the privacy policy and data collected.</label>
+  <label class="check"><input type="checkbox"> Only necessary permissions and data are enabled.</label>
+  <label class="check"><input type="checkbox"> Consent and learner explanations are addressed.</label>
+  <label class="check"><input type="checkbox"> Learner accounts and passwords are protected.</label>
+  <label class="check"><input type="checkbox"> There is a plan for data storage, deletion and incidents.</label>
+ </div><div class="feedback" id="privacyFeedback" aria-live="polite">0 of 6 safeguards selected. Complete the checklist before using VR with a class.</div></div>
+</section>
+
+<section class="section reveal" id="infrastructure">
+ <div class="section-head"><div><span class="tag">04 / MAKING IT POSSIBLE</span><h2>Two barriers. Practical solutions.</h2><p class="section-intro">Effective integration is not about buying the most expensive equipment. It is about matching available resources, teacher capacity and lesson goals.</p></div><span class="section-no">PLAN FOR REAL SCHOOLS</span></div>
+ <div class="two">
+  <div class="panel"><h3>🛰️ Infrastructure solutions</h3><ul><li><b>Start small:</b> pilot one short VR activity before scaling up.</li><li><b>Shared access:</b> use station rotation or small groups when headsets are limited.</li><li><b>Low-tech alternative:</b> offer a 360° video, desktop simulation, projected tour or image sequence.</li><li><b>Connectivity:</b> check bandwidth and download permitted offline content in advance.</li><li><b>Maintenance:</b> plan charging, cleaning, updates, storage and technical support.</li></ul></div>
+  <div class="panel"><h3>🧑‍🏫 Teacher-readiness solutions</h3><ul><li><b>Hands-on training:</b> practise device setup, navigation and troubleshooting.</li><li><b>Pedagogical planning:</b> align the VR task with curriculum outcomes and assessment.</li><li><b>Guided exploration:</b> provide a clear mission, prompts and reflection questions.</li><li><b>Peer support:</b> co-plan with colleagues and share tested lesson ideas.</li><li><b>Evaluate:</b> collect learner feedback and review whether VR improved learning.</li></ul></div>
+ </div>
+ <div class="callout">Inclusive rule: every learner should have an equivalent way to achieve the learning objective, whether or not they can or wish to use a headset.</div>
+</section>
+
+<section class="section reveal" id="activities">
+ <div class="section-head"><div><span class="tag">05 / INTERACTIVE LEARNING</span><h2>Mission: The virtual zoo.</h2><p class="section-intro">You are planning a Year 5 science lesson. Your class will explore animal habitats through a virtual zoo. Make a decision and see the feedback.</p></div><span class="section-no">CHOOSE YOUR RESPONSE</span></div>
+ <div class="activity">
+  <div class="panel"><span class="mini">SCENARIO 01</span><h3>The school has only four headsets.</h3><p>There are 28 pupils, and the internet connection is unstable. What is the most inclusive and realistic plan?</p>
+   <button class="choice" data-answer="a">A. Cancel the lesson because every pupil cannot use a headset at once.</button>
+   <button class="choice" data-answer="b">B. Rotate small groups through the headsets and provide a projected or offline alternative with the same learning task.</button>
+   <button class="choice" data-answer="c">C. Ask pupils to use their personal accounts and mobile data.</button>
+   <div class="feedback" id="scenarioFeedback" aria-live="polite">Choose an option to receive feedback.</div>
+  </div>
+  <div class="panel"><span class="mini">DESIGN A MINI LESSON</span><h3>From experience to evidence.</h3><p>Use this simple sequence to make the virtual zoo purposeful:</p>
+   <div class="live-list">
+    <div class="live-item"><span class="num">01</span><div><b>Before the tour</b><p>Introduce habitat vocabulary and explain headset safety, privacy and movement boundaries.</p></div></div>
+    <div class="live-item"><span class="num">02</span><div><b>During the tour</b><p>Observe two animals. Record habitat features using a worksheet without unnecessary personal data.</p></div></div>
+    <div class="live-item"><span class="num">03</span><div><b>After the tour</b><p>Compare habitats in pairs and explain one adaptation using evidence from observations.</p></div></div>
+   </div>
+   <div class="callout">Assessment evidence: completed observation sheet, pair discussion and a short exit ticket.</div>
+  </div>
+ </div>
+ <div class="panel" style="margin-top:18px"><h3>🎧 Listen to the learning summary</h3><p>Use your browser's built-in text-to-speech to hear a short recap. No audio file or voice recording is uploaded.</p><button class="btn secondary" id="speakBtn">▶ Play audio summary</button> <button class="btn secondary" id="stopBtn">■ Stop audio</button><p class="small-note" id="audioStatus" aria-live="polite">Audio uses your device's speech synthesis if supported.</p></div>
+</section>
+
+<section class="section reveal" id="toolkit">
+ <div class="section-head"><div><span class="tag">06 / TEACHER TOOLKIT</span><h2>Plan a VR lesson that works.</h2><p class="section-intro">A practical decision guide for teachers before introducing an immersive activity.</p></div><span class="section-no">READY · SAFE · PURPOSEFUL</span></div>
+ <div class="grid">
+  <article class="card"><span class="icon">🎯</span><h3>1. Learning purpose</h3><p>Write one measurable objective. Identify what pupils should know or do after the VR activity.</p></article>
+  <article class="card"><span class="icon">🧰</span><h3>2. Resource check</h3><p>Check devices, compatibility, charging, connectivity, accessibility and a backup plan.</p></article>
+  <article class="card"><span class="icon">🔏</span><h3>3. Privacy check</h3><p>Review permissions, accounts, consent, data collection, storage and deletion practices.</p></article>
+  <article class="card"><span class="icon">🧑‍🏫</span><h3>4. Teacher rehearsal</h3><p>Test the activity first. Prepare instructions, transitions, support and troubleshooting steps.</p></article>
+  <article class="card"><span class="icon">♿</span><h3>5. Inclusive options</h3><p>Offer a desktop, projected, captioned or non-headset alternative with equivalent learning outcomes.</p></article>
+  <article class="card"><span class="icon">📊</span><h3>6. Evaluate impact</h3><p>Check pupil understanding, participation, comfort and whether the technology added value.</p></article>
+ </div>
+</section>
+
+<section class="section reveal" id="assessment">
+ <div class="section-head"><div><span class="tag">07 / E-ASSESSMENT</span><h2>Ready for the VR checkpoint?</h2><p class="section-intro">Answer all 10 questions. Submit to receive your score, explanations and a suggested next step. This is a formative self-check, not a graded school record.</p></div><span class="section-no">10 QUESTIONS</span></div>
+ <form id="quizForm" class="panel">
+  <div class="quiz-q"><h4>1. What best describes virtual reality (VR)?</h4><label><input type="radio" name="q1" value="a"> A computer-generated environment that users can explore and interact with</label><label><input type="radio" name="q1" value="b"> A printed textbook with 3D pictures</label><label><input type="radio" name="q1" value="c"> A normal video call</label></div>
+  <div class="quiz-q"><h4>2. Which is an example of potentially sensitive VR-related data?</h4><label><input type="radio" name="q2" value="a"> The colour of a classroom wall</label><label><input type="radio" name="q2" value="b"> A learner's voice recording or movement data, if collected</label><label><input type="radio" name="q2" value="c"> The title of a public worksheet</label></div>
+  <div class="quiz-q"><h4>3. What should a teacher do before adopting a VR platform?</h4><label><input type="radio" name="q3" value="a"> Create accounts using pupils' full personal details immediately</label><label><input type="radio" name="q3" value="b"> Ignore the provider's privacy information</label><label><input type="radio" name="q3" value="c"> Review the platform, permissions and data practices</label></div>
+  <div class="quiz-q"><h4>4. A school has limited headsets. Which approach supports access?</h4><label><input type="radio" name="q4" value="a"> Use station rotation and equivalent non-headset activities</label><label><input type="radio" name="q4" value="b"> Allow only the fastest pupils to participate</label><label><input type="radio" name="q4" value="c"> Remove the learning objective</label></div>
+  <div class="quiz-q"><h4>5. What is an important part of teacher readiness?</h4><label><input type="radio" name="q5" value="a"> Owning the newest headset</label><label><input type="radio" name="q5" value="b"> Training in device operation and pedagogical lesson design</label><label><input type="radio" name="q5" value="c"> Using VR in every lesson</label></div>
+  <div class="quiz-q"><h4>6. Why should a teacher provide a non-VR alternative?</h4><label><input type="radio" name="q6" value="a"> To make the lesson longer</label><label><input type="radio" name="q6" value="b"> To avoid assessing learning</label><label><input type="radio" name="q6" value="c"> To support access, comfort and different learner needs</label></div>
+  <div class="quiz-q"><h4>7. Which action demonstrates data minimisation?</h4><label><input type="radio" name="q7" value="a"> Collect only the information necessary for the learning purpose</label><label><input type="radio" name="q7" value="b"> Collect every available data point</label><label><input type="radio" name="q7" value="c"> Share learner accounts publicly</label></div>
+  <div class="quiz-q"><h4>8. What makes a VR activity pedagogically meaningful?</h4><label><input type="radio" name="q8" value="a"> The number of visual effects</label><label><input type="radio" name="q8" value="b"> Clear learning outcomes, guided tasks and assessment</label><label><input type="radio" name="q8" value="c"> The most expensive equipment</label></div>
+  <div class="quiz-q"><h4>9. What is a responsible response to unstable internet?</h4><label><input type="radio" name="q9" value="a"> Continue without a backup plan</label><label><input type="radio" name="q9" value="b"> Ask pupils to share passwords</label><label><input type="radio" name="q9" value="c"> Test connectivity and prepare approved offline or projected alternatives</label></div>
+  <div class="quiz-q"><h4>10. How should teachers evaluate VR integration?</h4><label><input type="radio" name="q10" value="a"> Review learning evidence, participation, safety and learner feedback</label><label><input type="radio" name="q10" value="b"> Count the number of headsets only</label><label><input type="radio" name="q10" value="c"> Assume enjoyment means every objective was achieved</label></div>
+  <button class="btn primary" type="submit">Submit my answers ↗</button> <button class="btn secondary" type="reset" id="resetQuiz">Reset quiz</button>
+  <div class="result" id="quizResult" aria-live="polite"><strong id="scoreText">0/10</strong><h3 id="scoreTitle">Your result</h3><p id="scoreMessage"></p><div id="answerReview"></div></div>
+ </form>
+</section>
+
+<section class="section reveal" id="livestream">
+ <div class="section-head"><div><span class="tag">08 / SYNCHRONOUS LEARNING</span><h2>Live session: VR in the classroom.</h2><p class="section-intro">A planned live-streaming learning session based on the selected Topic 8 issue: data security and confidentiality, with a focus on infrastructure and teacher readiness.</p></div><span class="section-no">LIVE LEARNING PLAN</span></div>
+ <div class="two">
+  <div class="panel"><h3>🎥 Session overview</h3><p><b>Title:</b> VR in the Classroom — Exciting Learning, Safe Data</p><p><b>Target audience:</b> Pre-service and in-service teachers</p><p><b>Platform:</b> Google Meet / YouTube Live (select one according to access and privacy requirements)</p><p><b>Purpose:</b> Help teachers evaluate how VR can be used meaningfully and safely despite infrastructure and readiness constraints.</p><p><b>Engagement tools:</b> Live chat, polls, scenario prompts and Q&amp;A.</p><div class="callout">Do not display pupil names, personal records or private classroom footage during the stream. Obtain permission before showing any identifiable participant.</div></div>
+  <div class="panel"><h3>🗂️ Live-stream content and flow</h3><div class="live-list">
+   <div class="live-item"><span class="num">01</span><div><b>Welcome and introduction</b><p>Introduce the topic and explain that participants will explore meaningful and safe classroom VR use.</p></div></div>
+   <div class="live-item"><span class="num">02</span><div><b>Opening poll: Would you use VR in your classroom?</b><p>Invite viewers to vote yes, not yet or unsure, then briefly discuss their reasons.</p></div></div>
+   <div class="live-item"><span class="num">03</span><div><b>VR explained through a virtual zoo</b><p>Demonstrate how a virtual tour can support observation, vocabulary and discussion.</p></div></div>
+   <div class="live-item"><span class="num">04</span><div><b>Privacy and confidentiality alert</b><p>Explain possible data collection, platform permissions, consent, account protection and safe sharing.</p></div></div>
+   <div class="live-item"><span class="num">05</span><div><b>Infrastructure challenge</b><p>Discuss limited headsets, compatible devices, internet access and practical low-cost alternatives.</p></div></div>
+   <div class="live-item"><span class="num">06</span><div><b>Teacher readiness challenge</b><p>Highlight hands-on training, lesson alignment, troubleshooting and peer support.</p></div></div>
+   <div class="live-item"><span class="num">07</span><div><b>Audience scenario and discussion</b><p>Ask viewers to suggest a safe plan for a class with limited headsets and unstable internet.</p></div></div>
+   <div class="live-item"><span class="num">08</span><div><b>Key takeaways and Q&amp;A</b><p>Summarise the SAFE VR protocol and invite questions before closing the session.</p></div></div>
+  </div></div>
+ </div>
+ <div class="panel" style="margin-top:18px"><h3>💬 Suggested audience questions</h3><ul><li>What information might a VR application collect from its users?</li><li>How can teachers include pupils when there are not enough headsets?</li><li>What training would help teachers feel confident using VR?</li><li>When would a normal video or classroom activity be more suitable than VR?</li></ul></div>
+</section>
+
+<section class="section reveal" id="ethics">
+ <div class="section-head"><div><span class="tag">09 / DIGITAL CITIZENSHIP</span><h2>Ethical use is part of good teaching.</h2><p class="section-intro">Use digital tools responsibly and model the behaviour expected from learners.</p></div><span class="section-no">BE SAFE · BE FAIR · GIVE CREDIT</span></div>
+ <div class="grid">
+  <article class="card"><span class="icon">©️</span><h3>Copyright</h3><p>Use original, licensed or openly licensed media. Check the licence and conditions before downloading, adapting or sharing.</p></article>
+  <article class="card"><span class="icon">📝</span><h3>Academic integrity</h3><p>Submit original work, acknowledge ideas and quotations, and do not present another person's work as your own.</p></article>
+  <article class="card"><span class="icon">🔒</span><h3>Data privacy</h3><p>Collect the minimum data needed, use approved platforms and protect learner accounts and records.</p></article>
+  <article class="card"><span class="icon">🤖</span><h3>Responsible AI use</h3><p>Use AI to support brainstorming or drafting, verify its output, disclose use when required and never enter confidential pupil data.</p></article>
+  <article class="card"><span class="icon">🔗</span><h3>Source attribution</h3><p>Credit authors, organisations, images, videos, software and AI tools. Include working links and access details.</p></article>
+  <article class="card"><span class="icon">🧠</span><h3>Wellbeing and choice</h3><p>Provide breaks, clear physical boundaries and an alternative for learners who experience discomfort or prefer not to use a headset.</p></article>
+ </div>
+</section>
+
+<section class="section reveal" id="references">
+ <div class="section-head"><div><span class="tag">10 / LEARN MORE</span><h2>Resources & references.</h2><p class="section-intro">A curated starting point for further reading. The external resources open in a new tab; always check the latest platform policies before classroom use.</p></div><span class="section-no">APA 7 STYLE</span></div>
+ <div class="panel">
+  <div class="resource"><div><b>Penguin 360° | Zoo Minutes 360</b><small>KnowItAll / South Carolina ETV · Interactive 360° habitat video</small></div><a href="https://www.knowitall.org/video/penguin-360deg-zoo-minutes-360" target="_blank" rel="noopener">Watch 360° video ↗</a></div>
+  <div class="resource"><div><b>Data protection in schools</b><small>UNICEF · Guidance for schools and policymakers · 2024</small></div><a href="https://www.unicef.org/eca/reports/data-protection-schools" target="_blank" rel="noopener">Open resource ↗</a></div>
+  <div class="resource"><div><b>Using virtual reality for teacher education: A systematic review and meta-analysis</b><small>Han et al. · Frontiers in Virtual Reality · 2025</small></div><a href="https://doi.org/10.3389/frvir.2025.1620905" target="_blank" rel="noopener">Read article ↗</a></div>
+  <div class="resource"><div><b>Data Security: K-12 and Higher Education</b><small>U.S. Department of Education · Student Privacy</small></div><a href="https://studentprivacy.ed.gov/data-security-k-12-and-higher-education" target="_blank" rel="noopener">Open guidance ↗</a></div>
+  <div class="resource"><div><b>Child Protection in Digital Education</b><small>UNICEF · Policy brief and technical note</small></div><a href="https://www.unicef.org/documents/child-protection-digital-education" target="_blank" rel="noopener">Open resource ↗</a></div>
+  <div class="resource"><div><b>Opportunities overcome challenges in adopting immersive virtual reality in online learning</b><small>Computers and Education: Open · 2024</small></div><a href="https://doi.org/10.1016/j.caeo.2024.100208" target="_blank" rel="noopener">Read article ↗</a></div>
+ </div>
+ <div class="panel" style="margin-top:17px"><h3>APA 7th edition reference list</h3>
+  <p>Han, X., Luo, H., Wang, Z., &amp; Zhang, D. (2025). Using virtual reality for teacher education: A systematic review and meta-analysis of literature from 2014 to 2024. <i>Frontiers in Virtual Reality, 6</i>. https://doi.org/10.3389/frvir.2025.1620905</p>
+  <p>South Carolina ETV. (n.d.). <i>Penguin 360° | Zoo Minutes 360.</i> KnowItAll. https://www.knowitall.org/video/penguin-360deg-zoo-minutes-360</p>
+  <p>UNICEF. (2024, August). <i>Data protection in schools: Guidance for legislators, policy makers and schools.</i> https://www.unicef.org/eca/reports/data-protection-schools</p>
+  <p>UNICEF. (n.d.). <i>Child protection in digital education: Policy brief and technical note.</i> https://www.unicef.org/documents/child-protection-digital-education</p>
+  <p>U.S. Department of Education, Student Privacy Policy Office. (n.d.). <i>Data security: K-12 and higher education.</i> https://studentprivacy.ed.gov/data-security-k-12-and-higher-education</p>
+  <p>Abadia, R., Fritsch, J., Abdelaal, S., &amp; Jayawickrama, T. (2024). Opportunities overcome challenges in adopting immersive virtual reality in online learning. <i>Computers and Education Open, 7</i>, 100208. https://doi.org/10.1016/j.caeo.2024.100208</p>
+  <p class="small-note">Media and design attribution: The space-themed layout, CSS animations, interactive scenario, checklist, quiz and browser-based audio summary are original components created for this learning hub. No pupil data is collected or transmitted by this standalone page. External resources remain subject to their respective terms and privacy policies.</p>
+ </div>
+</section>
+
+<section class="section reveal" id="settings">
+ <div class="section-head"><div><span class="tag">ACCESSIBILITY SETTINGS</span><h2>Make the experience yours.</h2><p class="section-intro">Choose a calmer display if you prefer fewer visual effects.</p></div></div>
+ <div class="panel" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><label for="motionMode">Motion intensity</label><select id="motionMode"><option value="full">Full motion</option><option value="calm">Calm motion</option><option value="off">Turn animations off</option></select><span class="small-note">Your preference applies to this page only.</span></div>
+ <div class="panel" style="margin-top:16px"><h3>🔗 Add your own learning links</h3><p>Use this optional link panel to add your actual livestream room, presentation slides or teacher-created video. Empty fields are not shown as working links.</p>
+  <form id="linkForm" class="two"><div><label for="liveUrl" class="small-note">Livestream / meeting URL</label><input id="liveUrl" type="url" placeholder="https://..." style="width:100%;padding:11px;margin:5px 0 12px;border-radius:10px;border:1px solid var(--line);background:#13223d;color:white"><label for="slidesUrl" class="small-note">Slides / lesson notes URL</label><input id="slidesUrl" type="url" placeholder="https://..." style="width:100%;padding:11px;margin:5px 0 12px;border-radius:10px;border:1px solid var(--line);background:#13223d;color:white"></div><div><label for="videoUrl" class="small-note">Your video / podcast URL</label><input id="videoUrl" type="url" placeholder="https://..." style="width:100%;padding:11px;margin:5px 0 12px;border-radius:10px;border:1px solid var(--line);background:#13223d;color:white"><button class="btn primary" type="submit">Save my links ↗</button></div></form>
+  <div id="customLinksList" class="feedback" aria-live="polite">No custom links added yet. Add a real HTTPS link above to display it here.</div><p class="small-note">Links are displayed for this page session only; re-enter them after reloading. Add the same URLs to your Google Sites page if you want all visitors to access them.</p></div>
+</section>
+</main>
+<footer><div class="footer-brand">VR LEARNING LAB</div><p>Explore beyond reality. Teach with purpose. Protect every learner.</p><p>Interactive multimedia learning hub · EDUP3133 Technology for Teaching and Learning</p><p class="small-note">Educational resource. Review local school policies and applicable Malaysian data-protection requirements before real classroom deployment.</p></footer>
+
+<script>
+document.documentElement.classList.add('js-ready');
+const nav=document.getElementById('nav'),menuToggle=document.getElementById('menuToggle');
+menuToggle.addEventListener('click',()=>{const open=nav.classList.toggle('open');menuToggle.setAttribute('aria-expanded',String(open));});
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menuToggle.setAttribute('aria-expanded','false');}));
+const progress=document.getElementById('progress');
+function updateProgress(){const max=document.documentElement.scrollHeight-innerHeight;progress.style.width=(max>0?scrollY/max*100:0)+'%';}
+addEventListener('scroll',updateProgress,{passive:true});updateProgress();
+if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));}
+document.querySelectorAll('#privacyChecks input').forEach(input=>input.addEventListener('change',()=>{const all=[...document.querySelectorAll('#privacyChecks input')],n=all.filter(x=>x.checked).length;const msg=n===6?'All six safeguards are selected. Review the school’s policies and platform details before implementation.':n>=4?'Good progress. Complete the remaining safeguards before using VR with learners.':'Keep going. A safe VR lesson needs planning for every safeguard.';document.getElementById('privacyFeedback').textContent=`${n} of 6 safeguards selected. ${msg}`;document.getElementById('privacyFeedback').className='feedback '+(n===6?'good':'');}));
+const scenarioAnswers={a:['Not quite. Cancelling removes a learning opportunity even though alternatives are possible.','bad'],b:['Correct! Rotation makes limited headsets more accessible, while a projected or offline alternative supports participation and continuity.','good'],c:['Unsafe and inequitable. Personal accounts and mobile data may expose pupils to unnecessary privacy, cost and access risks.','bad']};
+document.querySelectorAll('[data-answer]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-answer]').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');const [msg,cls]=scenarioAnswers[btn.dataset.answer];const fb=document.getElementById('scenarioFeedback');fb.textContent=msg;fb.className='feedback '+cls;}));
+const summary='Virtual reality creates computer-generated environments that learners can explore. VR can support virtual field trips and simulations, but schools must consider privacy, infrastructure and teacher readiness. Teachers should select approved tools, minimise personal data, prepare consent and security safeguards, test devices and internet access, and provide non-headset alternatives. Most importantly, VR should support clear learning objectives and be evaluated for its educational value.';
+document.getElementById('speakBtn').addEventListener('click',()=>{if(!('speechSynthesis'in window)){document.getElementById('audioStatus').textContent='Speech synthesis is not supported by this browser. Please read the summary above.';return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(summary);u.rate=.92;u.onstart=()=>document.getElementById('audioStatus').textContent='Audio summary is playing.';u.onend=()=>document.getElementById('audioStatus').textContent='Audio summary finished.';speechSynthesis.speak(u);});
+document.getElementById('stopBtn').addEventListener('click',()=>{if('speechSynthesis'in window)speechSynthesis.cancel();document.getElementById('audioStatus').textContent='Audio stopped.';});
+const correct={q1:'a',q2:'b',q3:'c',q4:'a',q5:'b',q6:'c',q7:'a',q8:'b',q9:'c',q10:'a'};
+const explain={q1:'VR is a computer-generated environment that users can explore and interact with.',q2:'Voice and movement-related information may be personal data if the platform collects it.',q3:'Teachers should review privacy information, permissions and data practices before use.',q4:'Rotation and equivalent alternatives support fair access when devices are limited.',q5:'Teacher readiness includes both technical operation and pedagogical lesson design.',q6:'Alternatives support accessibility, comfort and learner choice.',q7:'Data minimisation means collecting only what is necessary for a clear purpose.',q8:'Meaningful VR connects the experience to outcomes, guided tasks and assessment.',q9:'Testing and preparing approved alternatives helps maintain learning continuity.',q10:'Evaluation should consider learning evidence, participation, safety and learner feedback.'};
+document.getElementById('quizForm').addEventListener('submit',e=>{e.preventDefault();let score=0,review='';for(let i=1;i<=10;i++){const q='q'+i,selected=document.querySelector(`input[name="${q}"]:checked`);const ok=selected&&selected.value===correct[q];if(ok)score++;review+=`<p style="font-size:12px;color:${ok?'#caffb8':'#ffc5d9'}"><b>Q${i}: ${ok?'Correct':'Review'}.</b> ${explain[q]}</p>`;}const result=document.getElementById('quizResult');result.style.display='block';document.getElementById('scoreText').textContent=score+'/10';document.getElementById('scoreTitle').textContent=score>=8?'Excellent work!':score>=6?'Good effort — keep building your confidence.':'Keep learning — revisit the hub and try again.';document.getElementById('scoreMessage').textContent=score>=8?'You demonstrate a strong understanding of safe and meaningful VR integration.':score>=6?'Review the explanations below and revisit the sections where you need more practice.':'Revisit the privacy, infrastructure and teacher-readiness sections before retaking the quiz.';document.getElementById('answerReview').innerHTML=review;result.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});});
+document.getElementById('resetQuiz').addEventListener('click',()=>{document.getElementById('quizResult').style.display='none';});
+document.getElementById('motionMode').addEventListener('change',e=>{document.body.classList.toggle('motion-off',e.target.value==='off');document.body.classList.toggle('calm-motion',e.target.value==='calm');if(e.target.value==='calm'){document.documentElement.style.setProperty('--motion','.45');document.querySelectorAll('.planet,.orbit,.float-chip,.pulse').forEach(el=>el.style.animationDuration='14s');}else{document.documentElement.style.setProperty('--motion','1');document.querySelectorAll('.planet,.orbit,.float-chip,.pulse').forEach(el=>el.style.animationDuration='');}});
+if(matchMedia('(prefers-reduced-motion: reduce)').matches){document.body.classList.add('motion-off');document.getElementById('motionMode').value='off';}
+
+document.getElementById('linkForm').addEventListener('submit',e=>{e.preventDefault();const fields=[['Livestream / meeting',document.getElementById('liveUrl').value.trim()],['Slides / lesson notes',document.getElementById('slidesUrl').value.trim()],['Video / podcast',document.getElementById('videoUrl').value.trim()]];const valid=[];for(const [label,value] of fields){if(!value)continue;try{const u=new URL(value);if(u.protocol==='https:')valid.push([label,u.href]);else throw new Error('https required');}catch{document.getElementById('customLinksList').textContent='Please enter valid HTTPS URLs only. No links were updated.';return;}}const box=document.getElementById('customLinksList');if(!valid.length){box.textContent='No custom links added yet. Add a real HTTPS link above to display it here.';return;}box.innerHTML=valid.map(([label,url])=>`<p><b>${label}:</b> <a href="${url.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" target="_blank" rel="noopener">Open resource ↗</a></p>`).join('');});
+</script>
+</body>
+</html>
